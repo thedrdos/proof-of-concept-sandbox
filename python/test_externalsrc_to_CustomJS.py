@@ -81,22 +81,28 @@ tbutton.js_on_change('active',CustomJS(args={'rel_path_data':rel_path_data,'data
                       cb_obj.label  = "Show:"+data_filenames[ind_label]
 
                       console.log("Loading: "+fullrel_path_data)
-                      
-fetch('http://time.jsontest.com')
-    .then(res => res.json())
-    .then((out) => {
-        console.log('Output: ', out);
-}).catch(err => console.error(err));
-
-                      fetch('fullrel_path_data')
-                            .then(res => res.json())
-                            .then((data) => {
-                                l.data_source.data = data
-                                l.data_source.change.emit()
-                                console.log("Loaded:"+fullrel_path_data)
-                        }).catch(err => console.error(err));
+                      $.getJSON(fullrel_path_data, function(data) { // This will not work on local files
+                        l.data_source.data = data
+                        l.data_source.change.emit()
+                        console.log("Loaded:"+fullrel_path_data)
+                      })
                   }
                   """))
+# I think the following should work instead of the jquary, but it doesn't seem
+# to work, don't know why
+                      #   fetch('http://time.jsontest.com')
+                      #       .then(res => res.json())
+                      #       .then((out) => {
+                      #           console.log('Output: ', out);
+                      #   }).catch(err => console.error(err));
+                      #
+                      # fetch('fullrel_path_data')
+                      #       .then(res => res.json())
+                      #       .then((data) => {
+                      #           l.data_source.data = data
+                      #           l.data_source.change.emit()
+                      #           console.log("Loaded:"+fullrel_path_data)
+                      #   }).catch(err => console.error(err));
 
 # The following is the standard template that bokeh.io save and show use
 # Sourced From: https://docs.bokeh.org/en/latest/docs/reference/core/templates.html
