@@ -1,0 +1,55 @@
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+<title>JavaScript - read JSON from URL</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js">
+    </script>
+</head>
+
+<body>
+    <div class="mypanel"></div>
+
+    <script>
+
+    //$.getJSON('http://time.jsontest.com', function(data) {
+    $.getJSON('http://time.jsontest.com', function(data) {
+        var text = `Date: ${data.date}<br>
+                    Time: ${data.time}<br>
+                    Unix time: ${data.milliseconds_since_epoch}`
+
+
+        $(".mypanel").html(text);
+    });
+    </script>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+</script>
+<script>
+$(document).ready(function(){
+  $("button").click(function(){
+    //$.getJSON("http://time.jsontest.com", function(data) { // This will not work on local files
+    $.getJSON("/data/demo_data.json", function(data) { // This will not work on local files
+        var text = `Date: ${data.date}<br>
+                    Time: ${data.time}<br>
+                    Unix time: ${data.milliseconds_since_epoch}`
+        $(".mypanel").html(text);
+    });
+  });
+});
+</script>
+</head>
+<body>
+
+<button>Get JSON data</button>
+
+<div class="mypanel"></div>
+
+</body>
+</html>
