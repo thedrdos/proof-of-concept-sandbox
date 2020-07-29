@@ -37,8 +37,8 @@ tbutton.js_on_change('active',CustomJS(args={},code="""
                       cb_obj.label  = "Hide Stuff"
                       }
 
-// $.getJSON("../data/demo_data.json", function(data) { // This will not work on local files
-$.getJSON("http://time.jsontest.com", function(data) { // This will not work on local files
+$.getJSON("../data/demo_data.json", function(data) { // This will not work on local files
+// $.getJSON("http://time.jsontest.com", function(data) { // This will not work on local files
 var text = `Date: ${data.date}<br>
             Time: ${data.time}<br>
             Unix time: ${data.milliseconds_since_epoch}`
