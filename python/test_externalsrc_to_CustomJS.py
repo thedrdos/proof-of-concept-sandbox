@@ -9,11 +9,40 @@ from bokeh import events
 from bokeh.models import  Label, LabelSet, CustomJS, TapTool, Toggle, Button, Spacer
 import os
 
-import numpy as np
-import datetime
-from datetime import date, timedelta
-
 from bokeh.layouts import column, row, gridplot # For show multiple figures
+
+import numpy as np
+
+import json
+# Write the dummy data, casting the np.arrays because json doesn't support them
+class NumpyEncoder(json.JSONEncoder):
+    """ Special json encoder for numpy types """
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
+
+# %% Make Dummy data
+dummy_data = {
+    'dummy_data_sin': {
+        'x': np.arange(0,2*np.pi,0.1),
+        'y': np.sin(np.arange(0,2*np.pi,0.1)),
+        },
+    'dummy_data_cos': {
+        'x': np.arange(0,2*np.pi,0.1),
+        'y': np.cos(np.arange(0,2*np.pi,0.1)),
+        },
+}
+
+# thats human readable
+path_data = '../site/data/'
+rel_path_data = '../data/'
+for dd in dummy_data:
+    with open(path_data+dd+'.json', 'w') as outfile: json.dump(dummy_data[dd], outfile,cls=NumpyEncoder,indent=4, sort_keys=True)
 
 # %% Assign output file
 def filename(fullname):
@@ -28,75 +57,70 @@ output_file(output_filename+".html",title=filename(output_filename))
 
 #%% Make State map buttons
 tbutton = Toggle(label="County Time History Graph") #
-tbutton.js_on_change('active',CustomJS(args={},code="""
+tbutton.js_on_change('active',CustomJS(args={'rel_path_data':rel_path_data,'data_filenames':[k for k in dummy_data]},code="""
+
         console.log('Hello Toggle button')
                   if (cb_obj.active == false){
-                      cb_obj.label  = "Show Stuff"
+                      cb_obj.label  = "Show Sin"
+                      console.log("Loading: "+rel_path_data+data_filenames[0]+".json")
+                      console.log(cb_obj)
+                      $.getJSON(rel_path_data+data_filenames[0]+".json", function(data) { // This will not work on local files
+                      console.log('Cos')
+                      console.log(cb_obj)
+                      })
                   }
                   else{
-                      cb_obj.label  = "Hide Stuff"
+                      cb_obj.label  = "Show Cos"
+                      console.log('Sin')
                       }
-
-$.getJSON("../data/demo_data.json", function(data) { // This will not work on local files
-// $.getJSON("http://time.jsontest.com", function(data) { // This will not work on local files
-var text = `Date: ${data.date}<br>
-            Time: ${data.time}<br>
-            Unix time: ${data.milliseconds_since_epoch}`
-console.log(text)
-});
                   """))
-# Add
-template = """
-{% block postamble %}
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script>
-    console.log('Hello template')
-    </script>
-{% endblock %}
-"""
 
-basic_template = """
-{% from macros import embed %}
+# The following is the standard template that bokeh.io save and show use
+# Sourced From: https://docs.bokeh.org/en/latest/docs/reference/core/templates.html
+# Specifically from the section on FILE = <Template 'file.html'> ... Template:file.html
 
-<!DOCTYPE html>
-<html lang="en">
-  {% block head %}
-  <head>
-    {% block inner_head %}
-      <meta charset="utf-8">
-      <title>{% block title %}{{ title | e if title else "Bokeh Plot" }}{% endblock %}</title>
-      {% block preamble %}{% endblock %}
-      {% block resources %}
-        {% block css_resources %}
-          {{ bokeh_css | indent(8) if bokeh_css }}
-        {% endblock %}
-        {% block js_resources %}
-          {{ bokeh_js | indent(8) if bokeh_js }}
-        {% endblock %}
-      {% endblock %}
-      {% block postamble %}{% endblock %}
-    {% endblock %}
-  </head>
-  {% endblock %}
-  {% block body %}
-  <body>
-    {% block inner_body %}
-      {% block contents %}
-        {% for doc in docs %}
-          {{ embed(doc) if doc.elementid }}
-          {% for root in doc.roots %}
-            {% block root scoped %}
-              {{ embed(root) | indent(10) }}
-            {% endblock %}
-          {% endfor %}
-        {% endfor %}
-      {% endblock %}
-      {{ plot_script | indent(8) }}
-    {% endblock %}
-  </body>
-  {% endblock %}
-</html>
-"""
+# basic_template = """
+# {% from macros import embed %}
+#
+# <!DOCTYPE html>
+# <html lang="en">
+#   {% block head %}
+#   <head>
+#     {% block inner_head %}
+#       <meta charset="utf-8">
+#       <title>{% block title %}{{ title | e if title else "Bokeh Plot" }}{% endblock %}</title>
+#       {% block preamble %}{% endblock %}
+#       {% block resources %}
+#         {% block css_resources %}
+#           {{ bokeh_css | indent(8) if bokeh_css }}
+#         {% endblock %}
+#         {% block js_resources %}
+#           {{ bokeh_js | indent(8) if bokeh_js }}
+#         {% endblock %}
+#       {% endblock %}
+#       {% block postamble %}{% endblock %}
+#     {% endblock %}
+#   </head>
+#   {% endblock %}
+#   {% block body %}
+#   <body>
+#     {% block inner_body %}
+#       {% block contents %}
+#         {% for doc in docs %}
+#           {{ embed(doc) if doc.elementid }}
+#           {% for root in doc.roots %}
+#             {% block root scoped %}
+#               {{ embed(root) | indent(10) }}
+#             {% endblock %}
+#           {% endfor %}
+#         {% endfor %}
+#       {% endblock %}
+#       {{ plot_script | indent(8) }}
+#     {% endblock %}
+#   </body>
+#   {% endblock %}
+# </html>
+# """
 
 external_src_template = """
 {% from macros import embed %}
@@ -119,11 +143,10 @@ external_src_template = """
       {% endblock %}
       {% block postamble %}
 
+    <!-- ############################################### -->
     <!-- Custom Added Code To Provide External Resources -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script>
-    console.log('Hello template')
-    </script>
+    <!-- ############################################### -->
 
       {% endblock %}
     {% endblock %}
@@ -148,8 +171,6 @@ external_src_template = """
   {% endblock %}
 </html>
 """
-
-# layout = row(p,tbutton)
 layout = row(tbutton)
 save(layout,template=external_src_template)
 view(output_filename+'.html')

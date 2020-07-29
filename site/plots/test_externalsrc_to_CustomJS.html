@@ -25,11 +25,10 @@
       
       
 
+    <!-- ############################################### -->
     <!-- Custom Added Code To Provide External Resources -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script>
-    console.log('Hello template')
-    </script>
+    <!-- ############################################### -->
 
       
     
@@ -43,14 +42,14 @@
           
           
             
-              <div class="bk-root" id="8ac2fcb2-95a7-4ff6-a4da-cccde3ca37e1" data-root-id="1003"></div>
+              <div class="bk-root" id="84fa8c01-ec9d-4012-bcbb-dfcb81ef688b" data-root-id="1003"></div>
             
           
         
       
       
         <script type="application/json" id="1004">
-          {"f386ce6c-f062-4d7d-9a1f-dade227737c5":{"roots":{"references":[{"attributes":{"children":[{"id":"1001"}]},"id":"1003","type":"Row"},{"attributes":{"icon":null,"js_property_callbacks":{"change:active":[{"id":"1002"}]},"label":"County Time History Graph"},"id":"1001","type":"Toggle"},{"attributes":{"code":"\n        console.log('Hello Toggle button')\n                  if (cb_obj.active == false){\n                      cb_obj.label  = \"Show Stuff\"\n                  }\n                  else{\n                      cb_obj.label  = \"Hide Stuff\"\n                      }\n\n$.getJSON(\"../data/demo_data.json\", function(data) { // This will not work on local files\n// $.getJSON(\"http://time.jsontest.com\", function(data) { // This will not work on local files\nvar text = `Date: ${data.date}&lt;br&gt;\n            Time: ${data.time}&lt;br&gt;\n            Unix time: ${data.milliseconds_since_epoch}`\nconsole.log(text)\n});\n                  "},"id":"1002","type":"CustomJS"}],"root_ids":["1003"]},"title":"Bokeh Application","version":"2.0.1"}}
+          {"356fc4ef-2d05-4064-9163-4b2d01f78688":{"roots":{"references":[{"attributes":{"children":[{"id":"1001"}]},"id":"1003","type":"Row"},{"attributes":{"args":{"data_filenames":["dummy_data_sin","dummy_data_cos"],"rel_path_data":"../data/"},"code":"\n\n        console.log('Hello Toggle button')\n                  if (cb_obj.active == false){\n                      cb_obj.label  = \"Show Sin\"\n                      console.log(\"Loading: \"+rel_path_data+data_filenames[0]+\".json\")\n                      console.log(cb_obj)\n                      $.getJSON(rel_path_data+data_filenames[0]+\".json\", function(data) { // This will not work on local files\n                      console.log('Cos')\n                      console.log(cb_obj)\n                      })\n                  }\n                  else{\n                      cb_obj.label  = \"Show Cos\"\n                      console.log('Sin')\n                      }\n                  "},"id":"1002","type":"CustomJS"},{"attributes":{"icon":null,"js_property_callbacks":{"change:active":[{"id":"1002"}]},"label":"County Time History Graph"},"id":"1001","type":"Toggle"}],"root_ids":["1003"]},"title":"Bokeh Application","version":"2.0.1"}}
         </script>
         <script type="text/javascript">
           (function() {
@@ -60,7 +59,7 @@
                   function embed_document(root) {
                     
                   var docs_json = document.getElementById('1004').textContent;
-                  var render_items = [{"docid":"f386ce6c-f062-4d7d-9a1f-dade227737c5","root_ids":["1003"],"roots":{"1003":"8ac2fcb2-95a7-4ff6-a4da-cccde3ca37e1"}}];
+                  var render_items = [{"docid":"356fc4ef-2d05-4064-9163-4b2d01f78688","root_ids":["1003"],"roots":{"1003":"84fa8c01-ec9d-4012-bcbb-dfcb81ef688b"}}];
                   root.Bokeh.embed.embed_items(docs_json, render_items);
                 
                   }
