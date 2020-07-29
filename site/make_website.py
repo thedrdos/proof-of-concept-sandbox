@@ -39,7 +39,10 @@ output_file.close();
 
 # Open the webpage to check it locally
 # webbrowser.open("file://"+os.path.abspath(html_file))
-webbrowser.open("https://proof-of-concept-sandbox.netlify.com")
+
 
 # Post to the website
 os.system('git ca "Updated using make_website.py script on: '+now+'"'+'; git push')
+
+# Open a webbrowser at the remote location
+webbrowser.open("https://proof-of-concept-sandbox.netlify.com")
