@@ -51,27 +51,41 @@ def filename(fullname):
 output_filename = "../site/plots/"+os.path.basename(os.path.splitext(__file__)[0]) # name the output file/s after the script file
 output_file(output_filename+".html",title=filename(output_filename))
 
-# dummy plot, dunno why i need it
-# p = figure()
-# p.line([0,1],[0,1])
+# %% Make Dummy plot
+p = figure()
+source = ColumnDataSource(dummy_data['dummy_data_cos'])
+l = p.line(x='x',y='y',source=source)
 
 #%% Make State map buttons
 tbutton = Toggle(label="County Time History Graph") #
-tbutton.js_on_change('active',CustomJS(args={'rel_path_data':rel_path_data,'data_filenames':[k for k in dummy_data]},code="""
+tbutton.js_on_change('active',CustomJS(args={'rel_path_data':rel_path_data,'data_filenames':[k for k in dummy_data],'p':p, 'l':l},code="""
 
         console.log('Hello Toggle button')
+            var N = data_files.length
                   if (cb_obj.active == false){
-                      cb_obj.label  = "Show Sin"
-                      console.log("Loading: "+rel_path_data+data_filenames[0]+".json")
-                      console.log(cb_obj)
-                      $.getJSON(rel_path_data+data_filenames[0]+".json", function(data) { // This will not work on local files
-                      console.log('Cos')
-                      console.log(cb_obj)
+                      var ind_label = 1
+                      var ind_data  = 0
+
+                      rel_path_data = rel_path_data+data_filenames[ind_data]+".json"
+                      cb_obj.label  = "Show:"+data_filenames[ind_label]
+                      console.log("Loading: "+rel_path_data)
+                      $.getJSON(rel_path_data+data_filenames[i]+".json", function(data) { // This will not work on local files
+                        l.data_source.data = data
+                        l.data_source.change.emit()
+                        console.log("Loaded:"+rel_path_data)
                       })
                   }
                   else{
-                      cb_obj.label  = "Show Cos"
-                      console.log('Sin')
+                      var ind_label = 0
+                      var ind_data = 1
+
+                      rel_path_data = rel_path_data+data_filenames[ind_data]+".json"
+                      cb_obj.label  = "Show:"+data_filenames[ind_label]
+                      console.log("Loading: "+rel_path_data)
+                      $.getJSON(rel_path_data+data_filenames[i]+".json", function(data) { // This will not work on local files
+                        l.data_source.data = data
+                        l.data_source.change.emit()
+                        console.log("Loaded:"+rel_path_data)
                       }
                   """))
 
