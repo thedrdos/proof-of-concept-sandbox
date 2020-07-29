@@ -61,32 +61,33 @@ tbutton = Toggle(label="County Time History Graph") #
 tbutton.js_on_change('active',CustomJS(args={'rel_path_data':rel_path_data,'data_filenames':[k for k in dummy_data],'p':p, 'l':l},code="""
 
         console.log('Hello Toggle button')
-            var N = data_files.length
+            var N = data_filenames.length
                   if (cb_obj.active == false){
                       var ind_label = 1
                       var ind_data  = 0
 
-                      rel_path_data = rel_path_data+data_filenames[ind_data]+".json"
+                      var fullrel_path_data = rel_path_data+data_filenames[ind_data]+".json"
                       cb_obj.label  = "Show:"+data_filenames[ind_label]
-                      console.log("Loading: "+rel_path_data)
-                      $.getJSON(rel_path_data+data_filenames[i]+".json", function(data) { // This will not work on local files
+                      console.log("Loading: "+fullrel_path_data)
+                      $.getJSON(fullrel_path_data, function(data) { // This will not work on local files
                         l.data_source.data = data
                         l.data_source.change.emit()
-                        console.log("Loaded:"+rel_path_data)
+                        console.log("Loaded:"+fullrel_path_data)
                       })
                   }
                   else{
                       var ind_label = 0
                       var ind_data = 1
 
-                      rel_path_data = rel_path_data+data_filenames[ind_data]+".json"
+                      var fullrel_path_data = rel_path_data+data_filenames[ind_data]+".json"
                       cb_obj.label  = "Show:"+data_filenames[ind_label]
-                      console.log("Loading: "+rel_path_data)
-                      $.getJSON(rel_path_data+data_filenames[i]+".json", function(data) { // This will not work on local files
+                      console.log("Loading: "+fullrel_path_data)
+                      $.getJSON(fullrel_path_data, function(data) { // This will not work on local files
                         l.data_source.data = data
                         l.data_source.change.emit()
-                        console.log("Loaded:"+rel_path_data)
-                      }
+                        console.log("Loaded:"+fullrel_path_data)
+                      })
+                  }
                   """))
 
 # The following is the standard template that bokeh.io save and show use
@@ -185,6 +186,6 @@ external_src_template = """
   {% endblock %}
 </html>
 """
-layout = row(p,tbutton)
+layout = column(p,tbutton)
 save(layout,template=external_src_template)
 view(output_filename+'.html')
