@@ -57,24 +57,6 @@ l = p.line(x='x',y='y',source=source)
 #%% Make Toggle button to switch between dummy data sets
 tbutton = Toggle(label="County Time History Graph") #
 tbutton.js_on_change('active',CustomJS(args={'rel_path_data':rel_path_data,'data_filenames':[k for k in dummy_data],'p':p, 'l':l},code="""
-function readJson (file_path) {
-   // http://localhost:8080
-   return fetch(file_path)
-   .then(response => {
-       if (!response.ok) {
-           throw new Error("HTTP error " + response.status);
-       }
-       return response.json();
-   })
-   .then(json => {
-       this.users = json;
-       console.log(this.users);
-   })
-   .catch(function () {
-       this.dataError = true;
-   })
-}
-
         console.log('Hello Toggle button')
             var N = data_filenames.length
                   if (cb_obj.active == false){
@@ -99,13 +81,13 @@ function readJson (file_path) {
                       cb_obj.label  = "Show:"+data_filenames[ind_label]
 
                       console.log("Loading: "+fullrel_path_data)
-                      //$.getJSON(fullrel_path_data, function(data) { // This will not work on local files
-                      data = readJson (fullrel_path_data)
-                      console.log(data)
-                        l.data_source.data = data
-                        l.data_source.change.emit()
-                        console.log("Loaded:"+fullrel_path_data)
-                      //})
+                      fetch('fullrel_path_data')
+                            .then(res => res.json())
+                            .then((data) => {
+                                l.data_source.data = data
+                                l.data_source.change.emit()
+                                console.log("Loaded:"+fullrel_path_data)
+                        }).catch(err => console.error(err));
                   }
                   """))
 
