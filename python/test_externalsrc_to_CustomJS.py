@@ -185,6 +185,6 @@ external_src_template = """
   {% endblock %}
 </html>
 """
-layout = row(tbutton)
+layout = row(p,tbutton)
 save(layout,template=external_src_template)
 view(output_filename+'.html')
