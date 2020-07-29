@@ -81,6 +81,12 @@ tbutton.js_on_change('active',CustomJS(args={'rel_path_data':rel_path_data,'data
                       cb_obj.label  = "Show:"+data_filenames[ind_label]
 
                       console.log("Loading: "+fullrel_path_data)
+                      
+fetch('http://time.jsontest.com')
+    .then(res => res.json())
+    .then((out) => {
+        console.log('Output: ', out);
+}).catch(err => console.error(err));
 
                       fetch('fullrel_path_data')
                             .then(res => res.json())
