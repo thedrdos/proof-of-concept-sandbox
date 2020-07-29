@@ -24,7 +24,7 @@ html_file = "./index.html"
 # Read the markdown document and encoded it
 input_file = codecs.open(md_file, mode="r", encoding="utf-8")
 text = input_file.read()
-text = text+"\n* Updated on "+now+"\n"
+text = text+"\n\* Updated on "+now+"\n"
 
 # Make the webpage from the markdown
 html = markdown.markdown(text)

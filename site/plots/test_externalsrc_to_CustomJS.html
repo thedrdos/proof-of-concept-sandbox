@@ -1,0 +1,94 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    
+      <meta charset="utf-8">
+      <title>test_externalsrc_to_CustomJS</title>
+      
+      
+        
+          
+        
+        
+          
+        <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.1.min.js" integrity="sha384-JpP8FXbgAZLkfur7LiK3j9AGBhHNIvF742meBJrjO2ShJDhCG2I1uVvW+0DUtrmc" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.0.1.min.js" integrity="sha384-xZlADit0Q04ISQEdKg2k3L4W9AwQBAuDs9nJL9fM/WwzL1tEU9VPNezOFX0nLEAz" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            Bokeh.set_log_level("info");
+        </script>
+        
+      
+      
+
+    <!-- Custom Added Code To Provide External Resources -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+    console.log('Hello template')
+    </script>
+
+      
+    
+  </head>
+  
+  
+  <body>
+    
+      
+        
+          
+          
+            
+              <div class="bk-root" id="fc1ff05e-29bd-4359-bf00-8dd67279652b" data-root-id="1003"></div>
+            
+          
+        
+      
+      
+        <script type="application/json" id="1004">
+          {"370e98fd-4168-4f82-b6a5-c62a30718df1":{"roots":{"references":[{"attributes":{"children":[{"id":"1001"}]},"id":"1003","type":"Row"},{"attributes":{"code":"\n        console.log('Hello Toggle button')\n                  if (cb_obj.active == false){\n                      cb_obj.label  = \"Show Stuff\"\n                  }\n                  else{\n                      cb_obj.label  = \"Hide Stuff\"\n                      }\n\n// $.getJSON(\"../data/demo_data.json\", function(data) { // This will not work on local files\n$.getJSON(\"http://time.jsontest.com\", function(data) { // This will not work on local files\nvar text = `Date: ${data.date}&lt;br&gt;\n            Time: ${data.time}&lt;br&gt;\n            Unix time: ${data.milliseconds_since_epoch}`\nconsole.log(text)\n});\n                  "},"id":"1002","type":"CustomJS"},{"attributes":{"icon":null,"js_property_callbacks":{"change:active":[{"id":"1002"}]},"label":"County Time History Graph"},"id":"1001","type":"Toggle"}],"root_ids":["1003"]},"title":"Bokeh Application","version":"2.0.1"}}
+        </script>
+        <script type="text/javascript">
+          (function() {
+            var fn = function() {
+              Bokeh.safely(function() {
+                (function(root) {
+                  function embed_document(root) {
+                    
+                  var docs_json = document.getElementById('1004').textContent;
+                  var render_items = [{"docid":"370e98fd-4168-4f82-b6a5-c62a30718df1","root_ids":["1003"],"roots":{"1003":"fc1ff05e-29bd-4359-bf00-8dd67279652b"}}];
+                  root.Bokeh.embed.embed_items(docs_json, render_items);
+                
+                  }
+                  if (root.Bokeh !== undefined) {
+                    embed_document(root);
+                  } else {
+                    var attempts = 0;
+                    var timer = setInterval(function(root) {
+                      if (root.Bokeh !== undefined) {
+                        clearInterval(timer);
+                        embed_document(root);
+                      } else {
+                        attempts++;
+                        if (attempts > 100) {
+                          clearInterval(timer);
+                          console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+                        }
+                      }
+                    }, 10, root)
+                  }
+                })(window);
+              });
+            };
+            if (document.readyState != "loading") fn();
+            else document.addEventListener("DOMContentLoaded", fn);
+          })();
+        </script>
+    
+  </body>
+  
+</html>
