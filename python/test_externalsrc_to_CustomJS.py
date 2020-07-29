@@ -81,6 +81,7 @@ tbutton.js_on_change('active',CustomJS(args={'rel_path_data':rel_path_data,'data
                       cb_obj.label  = "Show:"+data_filenames[ind_label]
 
                       console.log("Loading: "+fullrel_path_data)
+
                       fetch('fullrel_path_data')
                             .then(res => res.json())
                             .then((data) => {
