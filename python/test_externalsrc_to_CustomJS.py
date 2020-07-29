@@ -1,17 +1,15 @@
 from bokeh.io import show, output_file, save
 from bokeh.plotting import figure
-from bokeh.models import Div
-from bokeh.models import ColumnDataSource
 
 from bokeh.util.browser import view
 
+from bokeh.models import ColumnDataSource, CustomJS, Button, Toggle
 from bokeh import events
-from bokeh.models import  Label, LabelSet, CustomJS, TapTool, Toggle, Button, Spacer
-import os
-
-from bokeh.layouts import column, row, gridplot # For show multiple figures
+from bokeh.layouts import column
 
 import numpy as np
+
+import os
 
 import json
 # Write the dummy data, casting the np.arrays because json doesn't support them
