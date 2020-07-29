@@ -54,9 +54,26 @@ p = figure()
 source = ColumnDataSource(dummy_data['dummy_data_cos'])
 l = p.line(x='x',y='y',source=source)
 
-#%% Make State map buttons
+#%% Make Toggle button to switch between dummy data sets
 tbutton = Toggle(label="County Time History Graph") #
 tbutton.js_on_change('active',CustomJS(args={'rel_path_data':rel_path_data,'data_filenames':[k for k in dummy_data],'p':p, 'l':l},code="""
+function readJson (file_path) {
+   // http://localhost:8080
+   return fetch(file_path)
+   .then(response => {
+       if (!response.ok) {
+           throw new Error("HTTP error " + response.status);
+       }
+       return response.json();
+   })
+   .then(json => {
+       this.users = json;
+       console.log(this.users);
+   })
+   .catch(function () {
+       this.dataError = true;
+   })
+}
 
         console.log('Hello Toggle button')
             var N = data_filenames.length
@@ -66,6 +83,7 @@ tbutton.js_on_change('active',CustomJS(args={'rel_path_data':rel_path_data,'data
 
                       var fullrel_path_data = rel_path_data+data_filenames[ind_data]+".json"
                       cb_obj.label  = "Show:"+data_filenames[ind_label]
+
                       console.log("Loading: "+fullrel_path_data)
                       $.getJSON(fullrel_path_data, function(data) { // This will not work on local files
                         l.data_source.data = data
@@ -79,12 +97,15 @@ tbutton.js_on_change('active',CustomJS(args={'rel_path_data':rel_path_data,'data
 
                       var fullrel_path_data = rel_path_data+data_filenames[ind_data]+".json"
                       cb_obj.label  = "Show:"+data_filenames[ind_label]
+
                       console.log("Loading: "+fullrel_path_data)
-                      $.getJSON(fullrel_path_data, function(data) { // This will not work on local files
+                      //$.getJSON(fullrel_path_data, function(data) { // This will not work on local files
+                      data = readJson (fullrel_path_data)
+                      console.log(data)
                         l.data_source.data = data
                         l.data_source.change.emit()
                         console.log("Loaded:"+fullrel_path_data)
-                      })
+                      //})
                   }
                   """))
 
@@ -135,6 +156,8 @@ tbutton.js_on_change('active',CustomJS(args={'rel_path_data':rel_path_data,'data
 # </html>
 # """
 
+# Use an augmented template to make external sources available,
+# in particular: jquary so data can be read from json files
 external_src_template = """
 {% from macros import embed %}
 
